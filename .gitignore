@@ -1,2 +1,5 @@
 .vscode/
 chainflip
+src/__pycache__
+tests/__pycache__
+utils/__pycache__

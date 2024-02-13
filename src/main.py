@@ -1,5 +1,6 @@
 import asyncio
 import json
+from pprint import pprint
 
 import websockets
 
@@ -24,14 +25,14 @@ async def subscribe_pool_price(from_asset, to_asset):
         # Listen for messages
         async for message in websocket:
             response = json.loads(message)
-            print(f"Pool Price Update: {response}")
+            pprint(f"Pool Price Update: {response}", compact=True)
 
             # Process the message to extract and log the current price
             if 'method' in response and response['method'] == 'cf_subscribe_pool_price':
                 current_price_info = response.get('params', {}).get('result', {})
                 price = current_price_info.get('price')
                 if price:
-                    print(f"Formatted Current Price: {hex_price_to_decimal(price, ASSET_1, ASSET_2)}")
+                    pprint(f"Formatted Current Price: {hex_price_to_decimal(price, ASSET_1, ASSET_2)}", compact=True)
 
 async def get_pool_liquidity(base_asset, quote_asset):
     async with websockets.connect(URI) as websocket:
@@ -46,7 +47,7 @@ async def get_pool_liquidity(base_asset, quote_asset):
         }
         await websocket.send(json.dumps(liquidity_message))
         response = await websocket.recv()
-        print(f"Pool Liquidity Response: {response}")
+        pprint(f"Pool Liquidity Response: {response}", compact=True)
 
 # Run both coroutines concurrently
 async def main():
