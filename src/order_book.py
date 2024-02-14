@@ -36,14 +36,14 @@ class OrderBook(object):
         asks = list()
 
         for bid in data['limit_orders']['bids']:
-            price = tick_to_price(bid['tick'], self._base_asset)
+            price = tick_to_price(bid['tick'], self._base_asset, self._quote_asset)
             amount = hex_amount_to_decimal(bid['sell_amount'], self._quote_asset) / price
             if amount == 0:
                 continue
             else:
                 limit_buy = LimitOrder(
                     quantity=amount,
-                    price=tick_to_price(bid['tick'], self._base_asset),
+                    price=tick_to_price(bid['tick'], self._base_asset, self._quote_asset),
                     base_asset=self._base_asset,
                     quote_asset=self._quote_asset,
                     id=bid['id'],
@@ -55,7 +55,7 @@ class OrderBook(object):
                     self._open_orders.append(limit_buy)
 
         for ask in data['limit_orders']['asks']:
-            price = tick_to_price(ask['tick'], self._base_asset)
+            price = tick_to_price(ask['tick'], self._base_asset, self._quote_asset)
             amount = hex_amount_to_decimal(ask['sell_amount'], self._base_asset)
             if amount == 0:
                 continue
@@ -74,9 +74,11 @@ class OrderBook(object):
                     self._open_orders.append(limit_sell)
 
         for range_order in data['range_orders']:
+            lower_price = tick_to_price(range_order['range']['start'], self._base_asset, self._quote_asset)
+            upper_price = tick_to_price(range_order['range']['end'], self._base_asset, self._quote_asset)
             range = RangeOrder(
-                lower_price=tick_to_price(range_order['range']['start'], self._base_asset),
-                upper_price=tick_to_price(range_order['range']['end'], self._base_asset),
+                lower_price=lower_price,
+                upper_price=upper_price,
                 base_asset=self._base_asset,
                 quote_asset=self._quote_asset,
                 id=range_order['id'],
@@ -103,6 +105,7 @@ class OrderBook(object):
     async def update_orderbook(self):
         try:
             self.response = await self._chainflip(self._base_asset, self._quote_asset)
+            print(self.response['result'])
             self._update_orderbook(data=self.response['result'])
         except Exception as e:
             print(f"Error updating orderbook: {e}")

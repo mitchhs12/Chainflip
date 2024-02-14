@@ -1,5 +1,7 @@
 import aiohttp
 
+from utils.constants import URI
+
 
 class Chainflip(object):
     def __init__(self):
@@ -8,7 +10,7 @@ class Chainflip(object):
     
     async def await_response(self, header: dict, data: dict):
         async with self._client(headers=header) as session:
-            async with session.post(url='http://localhost:9944', json=data) as response:
+            async with session.post(url=URI, json=data) as response:
                 self._response = await response.json()
 
     async def get_orders(self, base_asset, quote_asset):

@@ -41,6 +41,6 @@ def decimal_to_hex_price(price: float, asset_1: str, asset_2: str) -> str:
 def hex_amount_to_decimal(hex_string: str, asset: str) -> float:
     return float(str((int(hex_string, 16)) / DECIMALS[asset]))
 
-def tick_to_price(tick: int, asset_1: str, asset_2: str = 'USDC') -> float:
+def tick_to_price(tick: int, asset_1: str, asset_2: str) -> float:
     price = 1.0001 ** tick
     return price * (DECIMALS[asset_1] / DECIMALS[asset_2])
