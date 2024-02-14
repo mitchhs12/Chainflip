@@ -35,6 +35,7 @@ async def subscribe_pool_price(from_asset, to_asset):
                 if price:
                     pprint(f"Formatted Current Price: {hex_price_to_decimal(price, ASSET_1, ASSET_2)}", compact=True)
 
+
 async def get_pool_liquidity(base_asset, quote_asset):
     async with websockets.connect(URI) as websocket:
         liquidity_message = {
@@ -68,8 +69,6 @@ async def get_pool_liquidity(base_asset, quote_asset):
             "total_range_orders_liquidity": total_range_orders_liquidity
         }
             
-
-
 # Run both coroutines concurrently
 async def main():
     await asyncio.gather(
