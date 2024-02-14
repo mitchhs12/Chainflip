@@ -20,7 +20,7 @@ class Chainflip(object):
             "method": "cf_pool_orders",
             "params": {
                 "base_asset": base_asset,
-                "quote_asset": quote_asset
+                "quote_asset": quote_asset,
             }
         }
         await self.await_response({'Content-Type': 'application/json'}, data)

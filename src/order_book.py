@@ -38,6 +38,7 @@ class OrderBook(object):
         for bid in data['limit_orders']['bids']:
             price = tick_to_price(bid['tick'], self._base_asset, self._quote_asset)
             amount = hex_amount_to_decimal(bid['sell_amount'], self._quote_asset) / price
+            print('bid amount', amount)
             if amount == 0:
                 continue
             else:
@@ -57,6 +58,7 @@ class OrderBook(object):
         for ask in data['limit_orders']['asks']:
             price = tick_to_price(ask['tick'], self._base_asset, self._quote_asset)
             amount = hex_amount_to_decimal(ask['sell_amount'], self._base_asset)
+            print('ask amount', amount)
             if amount == 0:
                 continue
             else:
