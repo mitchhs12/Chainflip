@@ -1,9 +1,15 @@
-class Chainflip:
-    """
-    Main Chainflip Interface
-    """
+import aiohttp
+
+
+class Chainflip(object):
     def __init__(self):
-        pass
+        self._client = aiohttp.ClientSession
+        self._orders = self.get_orders
+    
+    async def await_response(self, header: dict, data: dict):
+        async with self._client(headers=header) as session:
+            async with session.post(url='http://localhost:9944', json=data) as response:
+                self._response = await response.json()
 
     async def get_orders(self, base_asset, quote_asset):
         data = {
@@ -15,3 +21,8 @@ class Chainflip:
                 "quote_asset": quote_asset
             }
         }
+        await self.await_response({'Content-Type': 'application/json'}, data)
+
+    async def __call__(self, *args):
+        await self.get_orders(*args)
+        return self._response

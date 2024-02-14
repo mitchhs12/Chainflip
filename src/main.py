@@ -1,9 +1,13 @@
 import asyncio
 import json
+import os
+import sys
 from pprint import pprint
 
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 import websockets
 
+from src.order_book import OrderBook
 from utils.constants import *
 from utils.helpers import hex_price_to_decimal
 
@@ -51,9 +55,16 @@ async def get_pool_liquidity(base_asset, quote_asset):
 
 # Run both coroutines concurrently
 async def main():
-    await asyncio.gather(
-        subscribe_pool_price("ETH", "USDC"),
-        get_pool_liquidity("BTC", "USDC")
-    )
+#     await asyncio.gather(
+#         subscribe_pool_price("ETH", "USDC"),
+#         get_pool_liquidity("BTC", "USDC")
+#     )
+    order_book = OrderBook(base_asset='ETH', quote_asset="USDC")  # Example for Ethereum
 
-asyncio.run(main())
+    await order_book.update()
+
+    order_book._visualize_order_book()
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
