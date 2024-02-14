@@ -3,7 +3,6 @@ import asyncio
 from src.order_book import OrderBook
 
 
-# Run both coroutines concurrently
 async def main():
     order_book = OrderBook(base_asset='ETH', quote_asset="USDC")  # Example for Ethereum
 
